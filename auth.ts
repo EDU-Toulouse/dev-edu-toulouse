@@ -1,9 +1,13 @@
 import NextAuth from "next-auth";
-import Discord from "next-auth/providers/discord";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/prisma";
+import authConfig from "./auth.config";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+import { PrismaClient } from "@prisma/client";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
+const prisma = new PrismaClient();
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  providers: [Discord],
+  session: { strategy: "jwt" },
+  ...authConfig,
 });
