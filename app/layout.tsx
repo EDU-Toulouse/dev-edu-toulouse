@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import Navbar from "./_components/nav-bar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EDU Toulouse",
+  title: "EDU",
   description: "EDU Toulouse Website",
 };
 
@@ -24,12 +25,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr" className="dark">
       <SessionProvider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          {children}
+          <Navbar />
+          <div className="p-3">{children}</div>
         </body>
       </SessionProvider>
     </html>
