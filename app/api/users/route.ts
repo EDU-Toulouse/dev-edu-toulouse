@@ -1,15 +1,29 @@
-// app/api/users/route.ts
 import { NextResponse } from "next/server";
-import { getAllUsers, createUser } from "@/lib/db-utils";
+import {
+  getAllUsers,
+  createUser,
+  getUserById,
+  getUserByEmail,
+  isAdmin,
+} from "@/lib/db-utils";
+import { User } from "@/types/user";
 
 export async function GET() {
   try {
-    const users = await getAllUsers();
-    return NextResponse.json({ status: 200, data: users });
+    if (!(await isAdmin())) {
+      return NextResponse.json(
+        { message: "Forbidden: Insufficient permissions" },
+        { status: 403 }
+      );
+    }
+
+    const users: User[] = await getAllUsers();
+
+    return NextResponse.json({ data: users }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Users API Error:", error);
     return NextResponse.json(
-      { status: 500, data: "Internal Server Error" },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }

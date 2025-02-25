@@ -1,6 +1,12 @@
 // app/api/users/[id]/route.ts
 import { NextResponse } from "next/server";
-import { getUserById, updateUser, deleteUser } from "@/lib/db-utils";
+import {
+  getUserById,
+  updateUser,
+  deleteUser,
+  isAdmin,
+  getCurrentUser,
+} from "@/lib/db-utils";
 
 export async function GET(
   request: Request,
@@ -8,6 +14,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const currentUser = await getCurrentUser();
+    if (!(await isAdmin()) && currentUser.id !== id) {
+      return NextResponse.json(
+        { message: "Forbidden: Insufficient permissions" },
+        { status: 403 }
+      );
+    }
     const user = await getUserById(id);
     if (!user) {
       return NextResponse.json(
