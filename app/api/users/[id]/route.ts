@@ -15,7 +15,7 @@ export async function GET(
   try {
     const { id } = await params;
     const currentUser = await getCurrentUser();
-    if (!(await isAdmin()) && currentUser.id !== id) {
+    if (!(await isAdmin()) && currentUser?.id !== id) {
       return NextResponse.json(
         { message: "Forbidden: Insufficient permissions" },
         { status: 403 }

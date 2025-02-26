@@ -1,7 +1,7 @@
 export interface User {
-  name: string;
-  id: string;
-  email: string;
-  image: string;
-  role: "USER" | "ADMIN";
+  name: string | null;
+  id: string | null;
+  email: string | null;
+  image: string | null;
+  role: "USER" | "ADMIN" | null;
 }

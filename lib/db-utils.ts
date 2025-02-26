@@ -22,10 +22,10 @@ export async function getCurrentUser(email?: string) {
 
 // Check if the session and the user's email exist
 export async function isAdmin() {
-  const currentUser: User | null = await getCurrentUser();
+  const currentUser: User | null | undefined = await getCurrentUser();
 
   // Check whether the user exists and has the right role
-  if (!currentUser || currentUser.role !== "ADMIN") {
+  if (!currentUser || currentUser?.role !== "ADMIN") {
     return false;
   }
 
@@ -75,3 +75,7 @@ export async function deleteUser(id: string) {
     where: { id },
   });
 }
+
+export const getEvents = async () => {
+  return prisma.event.findMany();
+};
