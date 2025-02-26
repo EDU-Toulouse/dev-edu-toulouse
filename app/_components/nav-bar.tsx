@@ -30,7 +30,7 @@ const variants = {
 
 function NavBar() {
   return (
-    <div className="fixed top-0 w-full p-5 flex flex-col justify-center items-center z-10">
+    <div className="fixed top-0 w-full p-5 flex flex-col justify-center items-center z-10 transition-all duration-300 hover:scale-105">
       <motion.div
         variants={variants}
         initial="hidden"

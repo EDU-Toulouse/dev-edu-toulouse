@@ -19,7 +19,7 @@ const floatingImages = [
 export default function Home() {
   return (
     <div>
-      <section className="flex flex-col items-center justify-center w-screen h-screen">
+      <section className="flex flex-col items-center justify-center max-w-screen h-screen">
         <div className="text-4xl font-semibold tracking-tight">
           <VerticalCutReveal
             splitBy="characters"
