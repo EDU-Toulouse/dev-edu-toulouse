@@ -3,9 +3,7 @@
 import React from "react";
 import NavLink from "./nav-links";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
-import { Magnetic } from "@/components/ui/magnetic";
 import NavAuthButton from "./nav-auth-button";
 import { usePathname } from "next/navigation";
 
