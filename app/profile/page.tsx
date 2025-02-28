@@ -20,6 +20,8 @@ import { User } from "@/types/user";
 import { format } from "date-fns";
 import LoadingScreen from "@/components/ui/loading-screen";
 
+import { motion } from "framer-motion";
+
 function Profile() {
   const { data: session, status } = useSession();
   const [userData, setUserData] = useState<User | null>(null);
@@ -39,7 +41,13 @@ function Profile() {
   if (status === "loading" || !userData) return <LoadingScreen />;
 
   return (
-    <div className="container mx-auto py-8 px-4 pt-24">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ type: "spring", duration: 1, bounce: 0.45 }}
+      className="container mx-auto py-8 px-4 pt-24"
+    >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left sidebar with user info */}
         <Card className="md:col-span-1">
@@ -187,7 +195,7 @@ function Profile() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

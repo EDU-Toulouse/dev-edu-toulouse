@@ -23,6 +23,7 @@ import {
   ChevronDown,
   Twitch,
 } from "lucide-react";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 export default function Home() {
   const [showMore, setShowMore] = useState(false);
@@ -38,6 +39,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="bg-transparent"
         >
           <Badge className="mb-4 px-3 py-1 text-sm bg-primary/10 text-primary">
             Prochaine LAN : {nextEventDate}
@@ -104,6 +106,16 @@ export default function Home() {
         >
           <ChevronDown className="h-8 w-8 text-muted-foreground" />
         </motion.div>
+        <div className="pointer-events-none">
+          <FlickeringGrid
+            className="z-0 absolute inset-0 size-full"
+            squareSize={4}
+            gridGap={6}
+            color="#6B7280"
+            maxOpacity={0.5}
+            flickerChance={0.1}
+          />
+        </div>
       </section>
 
       {/* Event Details Section */}

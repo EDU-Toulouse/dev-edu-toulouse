@@ -12,7 +12,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        transition={{ type: "spring", duration: 0.75, bounce: 0.45 }}
+        transition={{ type: "spring", duration: 1, bounce: 0.35 }}
       >
         {children}
       </motion.div>

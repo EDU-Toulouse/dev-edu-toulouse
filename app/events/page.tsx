@@ -13,9 +13,28 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+import { motion } from "framer-motion";
+
 import { EventStatus, Event } from "@/types/event";
 import Image from "next/image";
 import LoadingScreen from "@/components/ui/loading-screen";
+
+const variants = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      type: "spring",
+      duration: 1,
+      bounce: 0.25,
+    },
+  },
+  exit: {
+    opacity: 0,
+  },
+};
 
 const statusColorMap = {
   [EventStatus.SCHEDULED]: "bg-blue-100 text-blue-800",
@@ -48,15 +67,27 @@ const EventsListPage = () => {
 
   if (events.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
+      <motion.div
+        variants={variants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="container mx-auto px-4 py-12 text-center"
+      >
         <h2 className="text-2xl font-bold mb-4">No events found</h2>
         <p className="text-gray-500">Check back later for upcoming events.</p>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <motion.div
+      variants={variants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="container mx-auto px-4 py-8"
+    >
       <h1 className="text-3xl font-bold mb-8">Upcoming Events</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,7 +95,7 @@ const EventsListPage = () => {
           <EventCard key={event.id} event={event} />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
