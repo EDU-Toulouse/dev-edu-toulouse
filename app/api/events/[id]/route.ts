@@ -10,10 +10,12 @@ import {
 // Get a specific event
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const event = await getEventById(params.id);
+    // Await the params before using them
+    const { id } = await params;
+    const event = await getEventById(id);
     if (!event) {
       return NextResponse.json(
         { status: 404, data: "Event not found" },
@@ -33,9 +35,11 @@ export async function GET(
 // Update an event
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Await the params before using them
+    const { id } = await params;
     // Check if user is admin
     const admin = await isAdmin();
     if (!admin) {
@@ -46,7 +50,7 @@ export async function PUT(
     }
 
     const eventData = await request.json();
-    const updatedEvent = await updateEvent(params.id, eventData);
+    const updatedEvent = await updateEvent(id, eventData);
 
     return NextResponse.json({ status: 200, data: updatedEvent });
   } catch (error) {
@@ -70,9 +74,11 @@ export async function PUT(
 // Delete an event
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Await the params before using them
+    const { id } = await params;
     // Check if user is admin
     const admin = await isAdmin();
     if (!admin) {
@@ -82,7 +88,7 @@ export async function DELETE(
       );
     }
 
-    await deleteEvent(params.id);
+    await deleteEvent(id);
 
     return NextResponse.json({
       status: 200,
