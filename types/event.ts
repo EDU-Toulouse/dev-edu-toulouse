@@ -9,15 +9,15 @@ export interface Event {
   streamUrl: string;
   gameTitles: string[];
   organizer: string;
-  imageUrl: string?;
+  imageUrl: string | undefined;
   status: EventStatus;
   createdAt: string;
   updatedAt: string;
 }
 
-enum EventStatus {
-  "SCHEDULED",
-  "LIVE",
-  "COMPLETED",
-  "CANCELLED",
+export enum EventStatus {
+  SCHEDULED = "SCHEDULED",
+  LIVE = "LIVE",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
 }
