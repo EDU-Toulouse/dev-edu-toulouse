@@ -5,13 +5,13 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const screenVariants = {
   initial: {
-    y: "-200%",
+    opacity: 0,
   },
   animate: {
-    y: 0,
+    opacity: 1,
   },
   exit: {
-    y: "-200%",
+    opacity: 0,
   },
 };
 
@@ -27,10 +27,10 @@ function LoadingScreen() {
         duration: 1,
         bounce: 0.25,
       }}
-      className="absolute top-0 w-screen h-screen bg-primary/90"
+      className="fixed top-0 w-screen h-screen bg-transparent backdrop-blur-md z-50"
     >
       <div className="flex items-center justify-center w-full h-full">
-        <h1 className="text-5xl font-bold text-background">Loading...</h1>
+        <h1 className="text-5xl font-bold text-secondary">Loading...</h1>
       </div>
     </motion.div>
   );

@@ -1,11 +1,6 @@
+// @/app/api/users/route.ts
 import { NextResponse } from "next/server";
-import {
-  getAllUsers,
-  createUser,
-  getUserById,
-  getUserByEmail,
-  isAdmin,
-} from "@/lib/db-utils";
+import { getAllUsers, isAdmin } from "@/lib/db-utils";
 import { User } from "@/types/user";
 
 export async function GET() {
@@ -17,7 +12,8 @@ export async function GET() {
       );
     }
 
-    const users: User[] = await getAllUsers();
+    const usersData = await getAllUsers();
+    const users = usersData as unknown as User[];
 
     return NextResponse.json({ data: users }, { status: 200 });
   } catch (error) {

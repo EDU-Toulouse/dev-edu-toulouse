@@ -12,22 +12,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { User } from "@/types/user";
-import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
+import { format } from "date-fns";
 import LoadingScreen from "@/components/ui/loading-screen";
+
+import { motion } from "framer-motion";
 
 function Profile() {
   const { data: session, status } = useSession();
@@ -48,16 +41,25 @@ function Profile() {
   if (status === "loading" || !userData) return <LoadingScreen />;
 
   return (
-    <div className="container mx-auto py-8 px-4 pt-24">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ type: "spring", duration: 1, bounce: 0.45 }}
+      className="container mx-auto py-8 px-4 pt-24"
+    >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left sidebar with user info */}
         <Card className="md:col-span-1">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <Avatar className="h-24 w-24">
-                <AvatarImage src={userData.image} alt={userData.name} />
+                <AvatarImage
+                  src={userData.image || ""}
+                  alt={userData.name || ""}
+                />
                 <AvatarFallback>
-                  {userData.name.substring(0, 2).toUpperCase()}
+                  {userData.name!.substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -168,16 +170,22 @@ function Profile() {
                         You updated your profile information
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        February 25, 2025
+                        {format(
+                          new Date(userData?.createdAt!),
+                          "MMM d, yyyy • h:mm a"
+                        )}
                       </p>
                     </div>
                     <div className="pb-4">
                       <h3 className="font-medium">Account Created</h3>
                       <p className="text-sm text-muted-foreground">
-                        You created your account
+                        You created your profile
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        February 15, 2025
+                        {format(
+                          new Date(userData?.updatedAt!),
+                          "MMM d, yyyy • h:mm a"
+                        )}
                       </p>
                     </div>
                   </div>
@@ -187,7 +195,7 @@ function Profile() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

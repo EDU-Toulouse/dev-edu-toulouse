@@ -29,7 +29,7 @@ export default function RootLayout({
       <SessionProvider>
         <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
           <Navbar />
-          <div className="p-3">{children}</div>
+          <div className="p-3 mt-16">{children}</div>
         </body>
       </SessionProvider>
     </html>

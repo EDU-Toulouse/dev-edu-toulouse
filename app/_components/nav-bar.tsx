@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import { Magnetic } from "@/components/ui/magnetic";
 import NavAuthButton from "./nav-auth-button";
+import { usePathname } from "next/navigation";
 
 const links = [
   {
@@ -29,6 +30,7 @@ const variants = {
 };
 
 function NavBar() {
+  if (usePathname().startsWith("/admin/")) return <></>;
   return (
     <div className="fixed top-0 w-full p-5 flex flex-col justify-center items-center z-10 transition-all duration-300 hover:scale-105">
       <motion.div

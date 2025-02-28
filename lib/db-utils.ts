@@ -1,7 +1,7 @@
-// lib/db-utils.ts
+// @/lib/db-utils.ts
 import { prisma } from "@/prisma";
 import { auth } from "@/auth";
-import { User } from "@/types/user";
+import { Role, User } from "@/types/user";
 import { Session } from "@/types/session";
 
 export async function getUserSession() {
@@ -22,10 +22,10 @@ export async function getCurrentUser(email?: string) {
 
 // Check if the session and the user's email exist
 export async function isAdmin() {
-  const currentUser: User | null = await getCurrentUser();
+  const currentUser: User | null | undefined = await getCurrentUser();
 
   // Check whether the user exists and has the right role
-  if (!currentUser || currentUser.role !== "ADMIN") {
+  if (!currentUser || currentUser?.role !== Role.ADMIN) {
     return false;
   }
 
@@ -61,7 +61,7 @@ export async function createUser(name: string, email: string) {
 // Update user by ID
 export async function updateUser(
   id: string,
-  data: Partial<{ name: string; email: string }>
+  data: Partial<{ name: string; email: string; role: Role }>
 ) {
   return prisma.user.update({
     where: { id },
@@ -72,6 +72,40 @@ export async function updateUser(
 // Delete user by ID
 export async function deleteUser(id: string) {
   return prisma.user.delete({
+    where: { id },
+  });
+}
+
+// Get all events
+export const getEvents = async () => {
+  return prisma.event.findMany();
+};
+
+// Get a specific event by ID
+export async function getEventById(id: string) {
+  return prisma.event.findUnique({
+    where: { id },
+  });
+}
+
+// Create a new event
+export async function createEvent(eventData: any) {
+  return prisma.event.create({
+    data: eventData,
+  });
+}
+
+// Update an existing event
+export async function updateEvent(id: string, eventData: any) {
+  return prisma.event.update({
+    where: { id },
+    data: eventData,
+  });
+}
+
+// Delete an event
+export async function deleteEvent(id: string) {
+  return prisma.event.delete({
     where: { id },
   });
 }

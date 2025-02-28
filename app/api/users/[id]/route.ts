@@ -1,4 +1,4 @@
-// app/api/users/[id]/route.ts
+// @/app/api/users/[id]/route.ts
 import { NextResponse } from "next/server";
 import {
   getUserById,
@@ -10,12 +10,12 @@ import {
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
     const currentUser = await getCurrentUser();
-    if (!(await isAdmin()) && currentUser.id !== id) {
+    if (!(await isAdmin()) && currentUser?.id !== id) {
       return NextResponse.json(
         { message: "Forbidden: Insufficient permissions" },
         { status: 403 }
@@ -40,12 +40,12 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params; // Await params before destructuring
     const body = await request.json();
-    const { name, email } = body;
+    const { name, email, role } = body;
     if (!name && !email) {
       return NextResponse.json(
         {
@@ -55,7 +55,7 @@ export async function PUT(
         { status: 400 }
       );
     }
-    const updatedUser = await updateUser(id, { name, email });
+    const updatedUser = await updateUser(id, { name, email, role });
     return NextResponse.json({ status: 200, data: updatedUser });
   } catch (error) {
     console.error("Error updating user:", error);
@@ -68,10 +68,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const deletedUser = await deleteUser(id);
     return NextResponse.json({ status: 200, data: deletedUser });
   } catch (error) {
