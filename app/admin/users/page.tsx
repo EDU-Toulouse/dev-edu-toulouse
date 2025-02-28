@@ -58,7 +58,6 @@ import Image from "next/image";
 import { User as UserType, Role } from "@/types/user";
 
 const UsersAdminPage = () => {
-  const router = useRouter();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -88,7 +87,7 @@ const UsersAdminPage = () => {
       } else {
         toast.error("Error fetching users");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch users. Please try again.");
     } finally {
       setIsLoading(false);
@@ -154,7 +153,7 @@ const UsersAdminPage = () => {
       } else {
         toast.error(result.message || "Failed to create user");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to create user. Please try again.");
     }
   };
@@ -186,7 +185,7 @@ const UsersAdminPage = () => {
       } else {
         toast.error(result.message || "Failed to update user");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update user. Please try again.");
     }
   };
@@ -209,7 +208,7 @@ const UsersAdminPage = () => {
       } else {
         toast.error(result.message || "Failed to delete user");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete user. Please try again.");
     } finally {
       setIsDeleting(false);
@@ -390,9 +389,9 @@ const UsersAdminPage = () => {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the user "
-              {selectedUser?.name || selectedUser?.email}"? This action cannot
-              be undone.
+              Are you sure you want to delete the user &quot;
+              {selectedUser?.name || selectedUser?.email}&quot;? This action
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

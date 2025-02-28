@@ -29,7 +29,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -67,7 +66,6 @@ const statusColorMap = {
 };
 
 const EventsAdminPage = () => {
-  const router = useRouter();
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -105,7 +103,7 @@ const EventsAdminPage = () => {
       } else {
         toast.error("Error fetching events");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch events. Please try again.");
     } finally {
       setIsLoading(false);
@@ -119,11 +117,6 @@ const EventsAdminPage = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData({ ...formData, [name]: checked });
   };
 
   const handleStatusChange = (value: string) => {
@@ -211,7 +204,7 @@ const EventsAdminPage = () => {
       } else {
         toast.error(result.data);
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to create event. Please try again.");
     }
   };
@@ -245,7 +238,7 @@ const EventsAdminPage = () => {
       } else {
         toast.error(result.data);
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update event. Please try again.");
     }
   };
@@ -268,7 +261,7 @@ const EventsAdminPage = () => {
       } else {
         toast.error(result.data);
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete event. Please try again.");
     } finally {
       setIsDeleting(false);
@@ -725,8 +718,8 @@ const EventsAdminPage = () => {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the event "{selectedEvent?.name}"?
-              This action cannot be undone.
+              Are you sure you want to delete the event &quot;
+              {selectedEvent?.name}&quot;? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

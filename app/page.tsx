@@ -17,7 +17,6 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   Calendar,
-  Users,
   Trophy,
   Cpu,
   ChevronDown,
@@ -147,7 +146,7 @@ export default function Home() {
             </CardContent>
             <CardFooter>
               <Button variant="ghost" className="group">
-                Plan d'accès{" "}
+                Plan d&apos;accès{" "}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </CardFooter>
@@ -195,7 +194,7 @@ export default function Home() {
                 <li>PC/Laptop avec vos jeux installés</li>
                 <li>Écran, clavier, souris, casque</li>
                 <li>Multiprise et câble ethernet (5m min.)</li>
-                <li>Carte d'identité pour l'inscription</li>
+                <li>Carte d&apos;identité pour l&apos;inscription</li>
               </ul>
               <p className="mt-4">
                 Connexion internet haut débit et prises électriques fournies.
@@ -238,12 +237,15 @@ export default function Home() {
                     <div>
                       <h4 className="font-semibold mb-2">Tournois</h4>
                       <ul className="space-y-2">
-                        <li>CS2 - Équipe "HeadShot Heroes" (Vainqueurs)</li>
                         <li>
-                          Valorant - Équipe "Pixel Precision" (Vainqueurs)
+                          CS2 - Équipe &quot;HeadShot Heroes&quot; (Vainqueurs)
                         </li>
                         <li>
-                          League of Legends - Équipe "Nexus Guardians"
+                          Valorant - Équipe &quot;Pixel Precision&quot;
+                          (Vainqueurs)
+                        </li>
+                        <li>
+                          League of Legends - Équipe &quot;Nexus Guardians&quot;
                           (Vainqueurs)
                         </li>
                       </ul>
@@ -277,8 +279,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <p>
-                    Notre LAN d'été avec des tournois Fortnite, Apex Legends et
-                    Rocket League.
+                    Notre LAN d&apos;été avec des tournois Fortnite, Apex
+                    Legends et Rocket League.
                   </p>
                 </CardContent>
                 <CardFooter>
@@ -317,7 +319,7 @@ export default function Home() {
             Rejoignez notre communauté
           </h2>
           <p className="text-muted-foreground text-lg mb-8">
-            Notre association ne s'arrête pas aux LANs. Rejoignez notre
+            Notre association ne s&apos;arrête pas aux LANs. Rejoignez notre
             communauté en ligne pour participer à des tournois hebdomadaires,
             trouver des coéquipiers et rester informé de nos prochains
             événements.

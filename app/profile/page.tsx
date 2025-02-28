@@ -25,7 +25,6 @@ import { motion } from "framer-motion";
 function Profile() {
   const { data: session, status } = useSession();
   const [userData, setUserData] = useState<User | null>(null);
-  const [activeTab, setActiveTab] = useState("profile");
 
   useEffect(() => {
     // Only fetch when authenticated
@@ -83,11 +82,7 @@ function Profile() {
 
         {/* Main content area */}
         <div className="md:col-span-2">
-          <Tabs
-            defaultValue="profile"
-            className="w-full"
-            onValueChange={setActiveTab}
-          >
+          <Tabs defaultValue="profile" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="profile">Profile</TabsTrigger>
               <TabsTrigger value="settings">Settings</TabsTrigger>
