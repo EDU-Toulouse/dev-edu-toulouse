@@ -1,7 +1,7 @@
 // @/app/admin/users/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import {
@@ -13,6 +13,7 @@ import {
   Mail,
   Calendar,
   Shield,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,6 +54,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
+import { debounce } from "lodash"; // You might need to install this: npm install lodash
 
 // Import User interface
 import { User as UserType, Role } from "@/types/user";
@@ -65,6 +67,7 @@ const UsersAdminPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState<Partial<UserType>>({
     name: "",
     email: "",
@@ -168,7 +171,6 @@ const UsersAdminPage = () => {
       const response = await fetch(`/api/users/${selectedUser.id}`, {
         method: "DELETE",
       });
-
       const result = await response.json();
 
       if (response.status === 200) {
@@ -185,6 +187,27 @@ const UsersAdminPage = () => {
     }
   };
 
+  // Filter users based on search query
+  const filteredUsers = users.filter((user) => {
+    if (!searchQuery.trim()) return true;
+
+    const query = searchQuery.toLowerCase();
+    return (
+      user.name?.toLowerCase().includes(query) ||
+      false ||
+      user.email.toLowerCase().includes(query) ||
+      user.role.toLowerCase().includes(query)
+    );
+  });
+
+  // Debounced search handler
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchQuery(value);
+    }, 300),
+    []
+  );
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-8">
@@ -193,6 +216,37 @@ const UsersAdminPage = () => {
           <p className="text-muted-foreground">
             Manage your users from this dashboard
           </p>
+        </div>
+        <div className="relative w-full max-w-sm">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search users..."
+              className="pl-8 w-full"
+              onChange={(e) => debouncedSearch(e.target.value)}
+            />
+          </div>
+          {searchQuery && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute right-1 top-1.5 h-7 w-7 rounded-full p-0"
+              onClick={() => {
+                setSearchQuery("");
+                const searchInput = document.querySelector(
+                  'input[type="search"]'
+                ) as HTMLInputElement;
+                if (searchInput) {
+                  searchInput.value = "";
+                  searchInput.focus();
+                }
+              }}
+            >
+              <span className="sr-only">Clear search</span>
+              <span className="text-sm">×</span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -204,7 +258,7 @@ const UsersAdminPage = () => {
         </TabsList>
         <TabsContent value="all">
           <UserGrid
-            users={users}
+            users={filteredUsers}
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
@@ -212,7 +266,7 @@ const UsersAdminPage = () => {
         </TabsContent>
         <TabsContent value="admin">
           <UserGrid
-            users={users.filter((u) => u.role === Role.ADMIN)}
+            users={filteredUsers.filter((u) => u.role === Role.ADMIN)}
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
@@ -220,7 +274,7 @@ const UsersAdminPage = () => {
         </TabsContent>
         <TabsContent value="user">
           <UserGrid
-            users={users.filter((u) => u.role === Role.USER)}
+            users={filteredUsers.filter((u) => u.role === Role.USER)}
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
@@ -312,7 +366,6 @@ const UsersAdminPage = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
       <Toaster richColors closeButton />
     </div>
   );
