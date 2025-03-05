@@ -128,36 +128,6 @@ const UsersAdminPage = () => {
     setShowDeleteDialog(true);
   };
 
-  const handleCreateUser = async () => {
-    try {
-      if (!formData.name || !formData.email) {
-        toast.error("Name and email are required");
-        return;
-      }
-
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (response.status === 201) {
-        toast.success("User created successfully");
-        fetchUsers();
-        setShowCreateDialog(false);
-        resetForm();
-      } else {
-        toast.error(result.message || "Failed to create user");
-      }
-    } catch {
-      toast.error("Failed to create user. Please try again.");
-    }
-  };
-
   const handleUpdateUser = async () => {
     if (!selectedUser) return;
 
@@ -224,14 +194,6 @@ const UsersAdminPage = () => {
             Manage your users from this dashboard
           </p>
         </div>
-        <Button
-          onClick={() => {
-            resetForm();
-            setShowCreateDialog(true);
-          }}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Create User
-        </Button>
       </div>
 
       <Tabs defaultValue="all" className="mb-8">
@@ -265,67 +227,6 @@ const UsersAdminPage = () => {
           />
         </TabsContent>
       </Tabs>
-
-      {/* Create User Dialog */}
-      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Create New User</DialogTitle>
-            <DialogDescription>
-              Fill in the details to create a new user.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
-              <Input
-                id="name"
-                name="name"
-                value={formData?.name ? formData?.name : ""}
-                onChange={handleInputChange}
-                placeholder="Enter user name"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Enter user email"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Select
-                value={formData.role?.toString()}
-                onValueChange={handleRoleChange}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={Role.USER.toString()}>User</SelectItem>
-                  <SelectItem value={Role.ADMIN.toString()}>Admin</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowCreateDialog(false)}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleCreateUser}>Create User</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Edit User Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
