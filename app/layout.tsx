@@ -30,7 +30,6 @@ export default function RootLayout({
         <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
           <Navbar />
           <div className="p-3 mt-16 min-h-screen">{children}</div>
-          {/* Footer */}
           <footer className="py-12 px-4 bg-secondary/20">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
               <div className="mb-6 md:mb-0">
