@@ -109,3 +109,43 @@ export async function deleteEvent(id: string) {
     where: { id },
   });
 }
+
+// Get all events
+export const getRegistrations = async () => {
+  return prisma.registration.findMany();
+};
+
+// Get a specific event by ID
+export async function getRegistrationById(id: string) {
+  return prisma.registration.findUnique({
+    where: { id },
+  });
+}
+
+// Get all the registration for a given user (by its userId)
+export async function getUserRegistrations(userId: string) {
+  return prisma.registration.findMany({
+    where: { userId },
+  });
+}
+
+// Get all the registrations for a given event (by its eventId)
+export async function getEventRegistrations(eventId: string) {
+  return prisma.registration.findMany({
+    where: { eventId },
+  });
+}
+
+// Create a new event
+export async function createRegistration(registrationData: any) {
+  return prisma.registration.create({
+    data: registrationData,
+  });
+}
+
+// Delete an event
+export async function deleteRegistration(id: string) {
+  return prisma.registration.delete({
+    where: { id },
+  });
+}
