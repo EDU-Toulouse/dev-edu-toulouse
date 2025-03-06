@@ -166,7 +166,7 @@ function Profile() {
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {format(
-                          new Date(userData?.createdAt!),
+                          new Date(userData?.createdAt),
                           "MMM d, yyyy • h:mm a"
                         )}
                       </p>
@@ -178,7 +178,7 @@ function Profile() {
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {format(
-                          new Date(userData?.updatedAt!),
+                          new Date(userData?.updatedAt),
                           "MMM d, yyyy • h:mm a"
                         )}
                       </p>

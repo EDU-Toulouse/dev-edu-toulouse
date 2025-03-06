@@ -212,8 +212,8 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
               </div>
             </DialogTitle>
             <DialogDescription>
-              Are you sure you want to cancel your registration for "
-              {event.name}"? This action cannot be undone.
+              Are you sure you want to cancel your registration for &quot;
+              {event.name}&quot;? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex gap-2 sm:justify-around">
