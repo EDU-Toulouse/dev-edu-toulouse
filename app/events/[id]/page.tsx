@@ -10,6 +10,7 @@ import {
   Clock,
   ArrowLeft,
   ExternalLink,
+  Users2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ import Image from "next/image";
 import LoadingScreen from "@/components/ui/loading-screen";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import RegistrationButton from "./_components/registration-button";
 
 const statusColorMap = {
   [EventStatus.SCHEDULED]: "bg-blue-100 text-blue-800",
@@ -39,6 +41,10 @@ export default function EventDetailsPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshData, setRefreshData] = useState<boolean>(false);
+  const [registrationCount, setRegistrationCount] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -59,6 +65,25 @@ export default function EventDetailsPage() {
         setIsLoading(false);
       });
   }, [params.id]);
+
+  useEffect(() => {
+    fetch(`/api/registrations/event/count/${id}`, {
+      cache: "no-cache",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Registration count not found");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setRegistrationCount(data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching event:", error);
+        setError(error.message);
+      });
+  }, [refreshData]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -104,15 +129,33 @@ export default function EventDetailsPage() {
         {/* Main Content */}
         <div className="lg:col-span-2">
           <div className="relative mb-6">
-            <div className="h-64 md:h-96 w-full overflow-hidden rounded-xl">
+            <div className="h-64 md:h-96 w-full overflow-hidden rounded-xl hover:overflow-visible ">
               {event.imageUrl ? (
                 <Image
                   src={event.imageUrl}
                   alt={event.name}
                   width={2000}
                   height={1000}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-xl"
                 />
+              ) : event.isOnline &&
+                event.streamUrl &&
+                event.status === EventStatus.LIVE ? (
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold mb-3">Live Stream</h2>
+                  <div className="aspect-video h-full bg-gray-100 rounded-lg overflow-hidden z-50 transition-all duration-500 hover:scale-105">
+                    <iframe
+                      src={`https://${event.streamUrl}`}
+                      className="w-full h-full object-contain"
+                      allowFullScreen
+                      title={`${event.name} live stream`}
+                      frameBorder="10"
+                      scrolling="no"
+                      height="348"
+                      width="620"
+                    ></iframe>
+                  </div>
+                </div>
               ) : (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-500">No image available</span>
@@ -182,22 +225,6 @@ export default function EventDetailsPage() {
               </div>
             </div>
           )}
-
-          {event.isOnline &&
-            event.streamUrl &&
-            event.status === EventStatus.LIVE && (
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-3">Live Stream</h2>
-                <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                  <iframe
-                    src={event.streamUrl}
-                    className="w-full h-full"
-                    allowFullScreen
-                    title={`${event.name} live stream`}
-                  ></iframe>
-                </div>
-              </div>
-            )}
         </div>
 
         {/* Sidebar */}
@@ -223,7 +250,7 @@ export default function EventDetailsPage() {
                     href={event.streamUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                    className="text-primary hover:text-primary/75 flex items-center gap-1"
                   >
                     <span className="truncate">{event.streamUrl}</span>
                     <ExternalLink className="h-4 w-4" />
@@ -258,25 +285,17 @@ export default function EventDetailsPage() {
                   </a>
                 </Button>
               ) : (
-                <Button
-                  className="w-full"
-                  size="lg"
-                  variant={
-                    event.status === EventStatus.SCHEDULED
-                      ? "default"
-                      : "outline"
-                  }
-                  disabled={
-                    event.status === EventStatus.CANCELLED ||
-                    event.status === EventStatus.COMPLETED
-                  }
-                >
-                  {event.status === EventStatus.SCHEDULED
-                    ? "Register for Event"
-                    : event.status === EventStatus.COMPLETED
-                    ? "Event Completed"
-                    : "Event Cancelled"}
-                </Button>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Users2 />
+                    <h1>{registrationCount} inscriptions</h1>
+                  </div>
+                  <RegistrationButton
+                    event={event}
+                    setRefresh={setRefreshData}
+                    refresh={refreshData}
+                  />
+                </div>
               )}
             </CardFooter>
           </Card>

@@ -101,7 +101,7 @@ const EventsListPage = () => {
 
 const EventCard = ({ event }: { event: Event }) => {
   return (
-    <Card className="h-full flex flex-col hover:shadow-md transition-shadow">
+    <Card className="h-full flex flex-col hover:shadow-md transition-all duration-300 hover:scale-105">
       <div className="relative">
         <div className="h-48 w-full overflow-hidden rounded-t-xl">
           {event.imageUrl ? (

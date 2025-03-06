@@ -7,17 +7,10 @@ export async function GET(
   { params }: { params: Promise<{ eventId: string }> }
 ) {
   try {
-    if (!(await isAdmin())) {
-      return NextResponse.json(
-        { message: "Forbidden: Insufficient permissions" },
-        { status: 403 }
-      );
-    }
-
     const { eventId } = await params;
     const registrations = await getEventRegistrations(eventId);
 
-    return NextResponse.json({ status: 200, data: registrations });
+    return NextResponse.json({ status: 200, data: registrations.length });
   } catch (error) {
     console.error("Error fetching registrations:", error);
     return NextResponse.json(

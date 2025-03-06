@@ -35,6 +35,8 @@ export async function POST(request: NextRequest) {
   try {
     const registrationData = await request.json();
 
+    console.log(registrationData);
+
     // Basic validation
     if (!registrationData.userId || !registrationData.eventId) {
       return NextResponse.json(

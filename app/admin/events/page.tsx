@@ -12,6 +12,7 @@ import {
   Calendar,
   MapPin,
   Globe,
+  Users2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,6 +58,7 @@ import { toast } from "sonner";
 // Import your Event interface
 import { Event, EventStatus } from "@/types/event";
 import Image from "next/image";
+import { Registration } from "@/types/registration";
 
 const statusColorMap = {
   [EventStatus.SCHEDULED]: "bg-blue-100 text-blue-800",
@@ -107,6 +109,66 @@ const EventsAdminPage = () => {
       toast.error("Failed to fetch events. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(false);
+  const [showRegistrationsDialog, setShowRegistrationsDialog] = useState(false);
+
+  const fetchRegistrations = async (eventId: string) => {
+    setIsLoadingRegistrations(true);
+    try {
+      const response = await fetch(`/api/registrations/event/${eventId}`);
+      const result = await response.json();
+
+      if (result.status === 200) {
+        // Fetch user data for each registration
+        const registrationsWithUserData = await Promise.all(
+          result.data.map(async (registration: Registration) => {
+            const userResponse = await fetch(
+              `/api/users/${registration.userId}`
+            );
+            const userData = await userResponse.json();
+
+            return {
+              ...registration,
+              user: userData.status === 200 ? userData.data : null,
+            };
+          })
+        );
+
+        setRegistrations(registrationsWithUserData);
+        setShowRegistrationsDialog(true);
+      } else {
+        toast.error("Error fetching event's registrations");
+      }
+    } catch (error) {
+      toast.error("Failed to fetch event's registrations. Please try again.");
+    } finally {
+      setIsLoadingRegistrations(false);
+    }
+  };
+
+  const handleDeleteRegistration = async (registrationId: string) => {
+    try {
+      const response = await fetch(`/api/registrations/${registrationId}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+
+      if (result.status === 200) {
+        toast.success("Registration removed successfully");
+        // Refresh the registrations list
+        if (selectedEvent) {
+          fetchRegistrations(selectedEvent.id);
+        }
+      } else {
+        toast.error(result.data || "Failed to remove registration");
+      }
+    } catch (error) {
+      toast.error("An error occurred while removing registration");
     }
   };
 
@@ -301,6 +363,10 @@ const EventsAdminPage = () => {
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
+            onViewRegistrations={(event) => {
+              setSelectedEvent(event);
+              fetchRegistrations(event.id);
+            }}
           />
         </TabsContent>
         <TabsContent value="scheduled">
@@ -309,6 +375,10 @@ const EventsAdminPage = () => {
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
+            onViewRegistrations={(event) => {
+              setSelectedEvent(event);
+              fetchRegistrations(event.id);
+            }}
           />
         </TabsContent>
         <TabsContent value="live">
@@ -317,6 +387,10 @@ const EventsAdminPage = () => {
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
+            onViewRegistrations={(event) => {
+              setSelectedEvent(event);
+              fetchRegistrations(event.id);
+            }}
           />
         </TabsContent>
         <TabsContent value="completed">
@@ -325,6 +399,10 @@ const EventsAdminPage = () => {
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
+            onViewRegistrations={(event) => {
+              setSelectedEvent(event);
+              fetchRegistrations(event.id);
+            }}
           />
         </TabsContent>
         <TabsContent value="cancelled">
@@ -333,6 +411,10 @@ const EventsAdminPage = () => {
             isLoading={isLoading}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
+            onViewRegistrations={(event) => {
+              setSelectedEvent(event);
+              fetchRegistrations(event.id);
+            }}
           />
         </TabsContent>
       </Tabs>
@@ -526,6 +608,153 @@ const EventsAdminPage = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Registrations Dialog */}
+      <Dialog
+        open={showRegistrationsDialog}
+        onOpenChange={setShowRegistrationsDialog}
+      >
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              Event Registrations: {selectedEvent?.name}
+            </DialogTitle>
+            <DialogDescription>
+              View all users registered for this event
+            </DialogDescription>
+          </DialogHeader>
+
+          {isLoadingRegistrations ? (
+            <div className="py-8 text-center">
+              <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Loading registrations...
+              </p>
+            </div>
+          ) : registrations.length === 0 ? (
+            <div className="py-8 text-center">
+              <Users2 className="h-12 w-12 mx-auto text-muted-foreground" />
+              <p className="mt-2 text-muted-foreground">
+                No registrations found for this event
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <h3>
+                Number of registration{registrations.length >= 2 ? "s" : ""} :{" "}
+                {registrations.length}
+              </h3>
+              <div className="rounded-md border">
+                <table className="min-w-full divide-y divide-secondary/80">
+                  <thead className="bg-secondary/80">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider"
+                      >
+                        User
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-text-foreground uppercase tracking-wider"
+                      >
+                        Email
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-text-foreground uppercase tracking-wider"
+                      >
+                        Registered On
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-text-foreground uppercase tracking-wider"
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-secondary/95 divide-y divide-secondary/80">
+                    {registrations.map((registration) => (
+                      <tr key={registration.id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            {registration.user?.image ? (
+                              <div className="h-10 w-10 flex-shrink-0">
+                                <Image
+                                  className="h-10 w-10 rounded-xl"
+                                  src={registration.user.image}
+                                  alt=""
+                                  width={40}
+                                  height={40}
+                                />
+                              </div>
+                            ) : (
+                              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                <Users2 className="h-5 w-5 text-gray-500" />
+                              </div>
+                            )}
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-foreground">
+                                {registration.user?.name || "Unknown"}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-foreground/50">
+                            {registration.user?.email || "No email"}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/50">
+                          {format(
+                            new Date(registration.createdAt),
+                            "MMM d, yyyy 'at' h:mm a"
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                className="flex items-center justify-center"
+                                variant="ghost"
+                                size="sm"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem
+                                className="text-red-600 focus:text-red-600"
+                                onClick={() =>
+                                  handleDeleteRegistration(registration.id)
+                                }
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" /> Remove
+                                Registration
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowRegistrationsDialog(false)}
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Edit Event Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -694,7 +923,7 @@ const EventsAdminPage = () => {
                     <button
                       type="button"
                       onClick={() => handleRemoveGame(game)}
-                      className="ml-1 rounded-full hover:bg-gray-200 p-1"
+                      className="ml-1 rounded-full hover:bg-primary p-1"
                     >
                       ×
                     </button>
@@ -751,11 +980,13 @@ const EventGrid = ({
   isLoading,
   onEdit,
   onDelete,
+  onViewRegistrations,
 }: {
   events: Event[];
   isLoading: boolean;
   onEdit: (event: Event) => void;
   onDelete: (event: Event) => void;
+  onViewRegistrations: (event: Event) => void;
 }) => {
   if (isLoading) {
     return (
@@ -856,9 +1087,18 @@ const EventGrid = ({
           </CardContent>
 
           <CardFooter className="pt-0 flex justify-between">
-            <Button variant="ghost" size="sm" onClick={() => onEdit(event)}>
-              <Pencil className="h-4 w-4 mr-1" /> Edit
-            </Button>
+            <div className="flex justify-center items-center gap-3">
+              <Button variant="ghost" size="sm" onClick={() => onEdit(event)}>
+                <Pencil className="h-4 w-4 mr-1" /> Edit
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onViewRegistrations(event)}
+              >
+                <Users2 className="h-4 w-4 mr-1" /> Registrations
+              </Button>
+            </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
