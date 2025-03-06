@@ -33,10 +33,4 @@ jobs:
         run: |
           pnpm exec eslint . \
             --ext .js,.jsx,.ts,.tsx \
-            --format stylish \
-            --output-file eslint-results.sarif
-
-      - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: eslint-results.sarif
+            --format stylish
