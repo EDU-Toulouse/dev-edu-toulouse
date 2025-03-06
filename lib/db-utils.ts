@@ -3,6 +3,7 @@ import { prisma } from "@/prisma";
 import { auth } from "@/auth";
 import { Role, User } from "@/types/user";
 import { Session } from "@/types/session";
+import { Event } from "@/types/event";
 
 export async function getUserSession() {
   return await auth();
@@ -89,7 +90,7 @@ export async function getEventById(id: string) {
 }
 
 // Create a new event
-export async function createEvent(eventData: any) {
+export async function createEvent(eventData: Event) {
   return prisma.event.create({
     data: eventData,
   });
