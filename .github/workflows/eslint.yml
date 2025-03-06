@@ -27,7 +27,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Install ESLint and formatter
         run: npm install eslint@latest @microsoft/eslint-formatter-sarif@latest eslint-config-next@latest @typescript-eslint/eslint-plugin@latest
