@@ -33,7 +33,7 @@ jobs:
         run: |
           pnpm exec eslint . \
             --ext .js,.jsx,.ts,.tsx \
-            --format @microsoft/eslint-formatter-sarif \
+            --format stylish \
             --output-file eslint-results.sarif
 
       - name: Upload SARIF results
