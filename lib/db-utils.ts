@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { Role, User } from "@/types/user";
 import { Session } from "@/types/session";
 import { Event } from "@/types/event";
+import { Registration } from "@prisma/client";
 
 export async function getUserSession() {
   return await auth();
@@ -97,7 +98,7 @@ export async function createEvent(eventData: Event) {
 }
 
 // Update an existing event
-export async function updateEvent(id: string, eventData: any) {
+export async function updateEvent(id: string, eventData: Event) {
   return prisma.event.update({
     where: { id },
     data: eventData,
@@ -138,7 +139,7 @@ export async function getEventRegistrations(eventId: string) {
 }
 
 // Create a new event
-export async function createRegistration(registrationData: any) {
+export async function createRegistration(registrationData: Registration) {
   return prisma.registration.create({
     data: registrationData,
   });
