@@ -7,24 +7,18 @@ import {
   Save,
   RefreshCw,
   AlertTriangle,
-  Info,
   Moon,
   Sun,
   Globe,
-  Shield,
   Database,
-  Mail,
   BellRing,
   ToggleLeft,
-  ToggleRight,
-  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -49,7 +43,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 
 // Define settings interface
 interface SiteSettings {
@@ -94,7 +87,6 @@ const AdminSettingsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     // Simulate fetching settings from API
@@ -111,7 +103,7 @@ const AdminSettingsPage = () => {
 
         // Using default settings for now
         setHasChanges(false);
-      } catch (error) {
+      } catch {
         toast.error("Failed to load settings");
       } finally {
         setIsLoading(false);
@@ -170,7 +162,7 @@ const AdminSettingsPage = () => {
 
       toast.success("Settings saved successfully");
       setHasChanges(false);
-    } catch (error) {
+    } catch {
       toast.error("Failed to save settings");
     } finally {
       setIsSaving(false);

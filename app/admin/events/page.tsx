@@ -2,7 +2,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import {
   Plus,
@@ -143,7 +142,7 @@ const EventsAdminPage = () => {
       } else {
         toast.error("Error fetching event's registrations");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch event's registrations. Please try again.");
     } finally {
       setIsLoadingRegistrations(false);
@@ -167,7 +166,7 @@ const EventsAdminPage = () => {
       } else {
         toast.error(result.data || "Failed to remove registration");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred while removing registration");
     }
   };

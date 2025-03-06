@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  LayoutDashboard,
   Users,
   Calendar,
   BarChart3,
@@ -60,7 +59,7 @@ const AdminDashboard = () => {
         if (usersResponse.status === 200) {
           setUsers(usersData.data);
         }
-      } catch (error) {
+      } catch {
         toast.error("Failed to fetch dashboard data");
       } finally {
         setIsLoading(false);

@@ -1,7 +1,6 @@
 // app/api/registration/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import {
-  deleteEvent,
   isAdmin,
   getRegistrationById,
   getCurrentUser,
