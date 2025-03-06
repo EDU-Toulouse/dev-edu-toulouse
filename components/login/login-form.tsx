@@ -42,7 +42,8 @@ export function LoginForm({
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
         <p className="text-secondary italic">
-          Don't worry, we will create an account if you don't have one.
+          Don&apos;t worry, we will create an account if you don&apos;t have
+          one.
         </p>
       </div>
     </form>
