@@ -16,6 +16,8 @@ model User {
   role          Role            @default(USER)
   accounts      Account[]
   sessions      Session[]
+  registrations Registration[]
+
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,7 +77,23 @@ model Event {
   status      EventStatus @default(SCHEDULED)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  registrations Registration[]
 }
+
+model Registration {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, eventId])
+}
+
 
 enum EventStatus {
   SCHEDULED

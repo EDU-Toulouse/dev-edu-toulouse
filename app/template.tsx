@@ -9,10 +9,10 @@ export default function Template({ children }: { children: React.ReactNode }) {
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0.2, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ type: "spring", duration: 1, bounce: 0.35 }}
+        exit={{ opacity: 0.2, y: -20 }}
+        transition={{ type: "spring", duration: 0.6, bounce: 0.35 }}
       >
         {children}
       </motion.div>

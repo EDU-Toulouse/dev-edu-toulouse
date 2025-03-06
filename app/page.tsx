@@ -364,46 +364,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 bg-secondary/20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-6 md:mb-0">
-            <h3 className="font-bold text-xl">
-              Association E-Sport & Digital Universe
-            </h3>
-            <p className="text-muted-foreground mt-2">
-              © 2025 Tous droits réservés
-            </p>
-          </div>
-          <div className="flex gap-8">
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              À propos
-            </a>
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Contact
-            </a>
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Partenaires
-            </a>
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              FAQ
-            </a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
