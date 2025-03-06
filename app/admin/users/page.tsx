@@ -2,10 +2,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import {
-  Plus,
   Pencil,
   Trash2,
   MoreHorizontal,
@@ -66,7 +64,6 @@ const UsersAdminPage = () => {
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState<Partial<UserType>>({
     name: "",
@@ -106,14 +103,6 @@ const UsersAdminPage = () => {
 
   const handleRoleChange = (value: string) => {
     setFormData({ ...formData, role: value as Role });
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      email: "",
-      role: Role.USER,
-    });
   };
 
   const handleEditClick = (user: UserType) => {
@@ -200,12 +189,15 @@ const UsersAdminPage = () => {
     );
   });
 
-  // Debounced search handler
   const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchQuery(value);
-    }, 300),
-    []
+    (value: string) => {
+      const handler = setTimeout(() => {
+        setSearchQuery(value);
+      }, 300);
+
+      return () => clearTimeout(handler);
+    },
+    [setSearchQuery] // setSearchQuery is stable, but included for completeness
   );
 
   return (

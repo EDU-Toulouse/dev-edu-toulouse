@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Event, EventStatus } from "@/types/event";
 import { User } from "@/types/user";
@@ -18,7 +17,7 @@ import { toast } from "sonner";
 
 type Props = {
   event: Event;
-  setRefresh: Function;
+  setRefresh: (value: boolean) => void;
   refresh: boolean;
 };
 

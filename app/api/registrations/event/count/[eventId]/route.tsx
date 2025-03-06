@@ -1,5 +1,5 @@
 // app/api/registrations/event/[eventId]/route.ts
-import { getEventRegistrations, isAdmin } from "@/lib/db-utils";
+import { getEventRegistrations } from "@/lib/db-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
