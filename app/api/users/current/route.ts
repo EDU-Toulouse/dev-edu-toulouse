@@ -1,4 +1,4 @@
-// @/app/api/users/route.ts
+// @/app/api/users/current/route.ts
 import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import { NextResponse } from "next/server";
