@@ -1,10 +1,14 @@
 // @/app/api/users/route.ts
+import { auth } from "@/auth";
+import { prisma } from "@/prisma";
 import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/db-utils";
 
 export async function GET() {
   try {
-    const currentUser = await getCurrentUser();
+    const session = await auth();
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session?.user?.id },
+    });
 
     if (!currentUser) {
       return NextResponse.json(
