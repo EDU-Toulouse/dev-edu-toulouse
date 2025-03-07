@@ -31,6 +31,8 @@ type Registration = {
 };
 
 const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
+  const { data: session, status } = useSession();
+
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
@@ -51,7 +53,6 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
 
   const fetchCurrentUser = async () => {
     try {
-      const { data: session, status } = useSession();
       // Use a client-side API endpoint instead of direct server function
       if (status === "authenticated") {
         const response = await fetch(`/api/users/${session?.user?.id}`);

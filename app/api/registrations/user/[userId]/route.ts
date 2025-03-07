@@ -1,4 +1,4 @@
-import { getCurrentUser, getUserRegistrations, isAdmin } from "@/lib/db-utils";
+import { getUserRegistrations } from "@/lib/db-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
