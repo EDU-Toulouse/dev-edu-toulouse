@@ -10,11 +10,11 @@ import {
 // Get a specific event
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     // Await the params before using them
-    const { id } = await params;
+    const { id } = params;
     const event = await getEventById(id);
     if (!event) {
       return NextResponse.json(
@@ -35,11 +35,11 @@ export async function GET(
 // Update an event
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     // Await the params before using them
-    const { id } = await params;
+    const { id } = params;
     // Check if user is admin
     const admin = await isAdmin();
     if (!admin) {
@@ -74,11 +74,11 @@ export async function PUT(
 // Delete an event
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     // Await the params before using them
-    const { id } = await params;
+    const { id } = params;
     // Check if user is admin
     const admin = await isAdmin();
     if (!admin) {

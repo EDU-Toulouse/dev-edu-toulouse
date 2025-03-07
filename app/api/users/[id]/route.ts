@@ -10,10 +10,10 @@ import {
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const currentUser = await getCurrentUser();
     if (!(await isAdmin()) && currentUser?.id !== id) {
       return NextResponse.json(
@@ -40,10 +40,10 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params; // Await params before destructuring
+    const { id } = params;
     const body = await request.json();
     const { name, email, role } = body;
     if (!name && !email) {
@@ -68,10 +68,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const deletedUser = await deleteUser(id);
     return NextResponse.json({ status: 200, data: deletedUser });
   } catch (error) {

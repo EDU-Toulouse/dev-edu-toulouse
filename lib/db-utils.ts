@@ -2,24 +2,33 @@
 import { prisma } from "@/prisma";
 import { auth } from "@/auth";
 import { Role, User } from "@/types/user";
-import { Session } from "@/types/session";
 import { Event } from "@/types/event";
 import { Registration } from "@prisma/client";
 
 export async function getUserSession() {
-  return await auth();
+  try {
+    const authResult = await auth();
+    return authResult;
+  } catch (error) {
+    console.error("Auth error:", error);
+    return null;
+  }
 }
 
 export async function getCurrentUser(email?: string) {
-  if (email) {
-    return await getUserByEmail(email);
-  }
-  const session: Session | null = await getUserSession();
-  if (!session || !session.user || !session.user.email) {
+  try {
+    if (email) {
+      return await getUserByEmail(email);
+    }
+    const session = await getUserSession();
+    if (!session || !session.user || !session.user.email) {
+      return null;
+    }
+    return await getUserByEmail(session.user.email);
+  } catch (error) {
+    console.error("Error getting current user:", error);
     return null;
   }
-
-  return await getUserByEmail(session.user.email);
 }
 
 // Check if the session and the user's email exist
