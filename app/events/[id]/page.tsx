@@ -64,7 +64,7 @@ export default function EventDetailsPage() {
         setError(error.message);
         setIsLoading(false);
       });
-  }, [params.id]);
+  }, [id]);
 
   useEffect(() => {
     fetch(`/api/registrations/event/count/${id}`, {
@@ -83,7 +83,7 @@ export default function EventDetailsPage() {
         console.error("Error fetching event:", error);
         setError(error.message);
       });
-  }, [refreshData]);
+  }, [refreshData, id]);
 
   if (isLoading) {
     return <LoadingScreen />;
