@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "pnpm install && pnpm prisma generate && echo 'NEXTAUTH_URL=https://edu-toulouse.org' > .env && next build",
+    "build": "pnpm install && pnpm prisma generate && echo 'NEXTAUTH_URL=https://edu-toulouse.org' >> .env && echo 'AUTH_TRUST_HOST=true' >> .env && next build",
     "start": "next start -p 80 -H 0.0.0.0",
     "lint": "next lint"
   },
