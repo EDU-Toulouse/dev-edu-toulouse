@@ -12,6 +12,7 @@ import {
 import { Event, EventStatus } from "@/types/event";
 import { User } from "@/types/user";
 import { TriangleAlertIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -42,7 +43,6 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
     fetchCurrentUser();
   }, []);
 
-   
   useEffect(() => {
     if (currentUser && event) {
       checkRegistrationStatus();
@@ -51,11 +51,14 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
 
   const fetchCurrentUser = async () => {
     try {
+      const { data: session, status } = useSession();
       // Use a client-side API endpoint instead of direct server function
-      const response = await fetch("/api/users/current");
-      if (response.ok) {
-        const user = await response.json();
-        setCurrentUser(user.data);
+      if (status === "authenticated") {
+        const response = await fetch(`/api/users/${session?.user?.id}`);
+        if (response.ok) {
+          const user = await response.json();
+          setCurrentUser(user.data);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch current user:", error);

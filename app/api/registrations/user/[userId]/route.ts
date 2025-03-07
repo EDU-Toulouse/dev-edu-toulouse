@@ -7,14 +7,14 @@ export async function GET(
 ) {
   try {
     const { userId } = await params;
-    const currentUser = await getCurrentUser();
+    // const currentUser = await getCurrentUser();
 
-    if (currentUser?.id !== userId && !(await isAdmin())) {
-      return NextResponse.json(
-        { message: "Forbidden: Insufficient permissions" },
-        { status: 403 }
-      );
-    }
+    // if (currentUser?.id !== userId && !(await isAdmin())) {
+    //  return NextResponse.json(
+    //    { message: "Forbidden: Insufficient permissions" },
+    //    { status: 403 }
+    //  );
+    // }
 
     const registrations = await getUserRegistrations(userId);
 
