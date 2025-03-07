@@ -2,7 +2,6 @@
 import { prisma } from "@/prisma";
 import { auth } from "@/auth";
 import { Role, User } from "@/types/user";
-import { Session } from "@/types/session";
 import { Event } from "@/types/event";
 import { Registration } from "@prisma/client";
 
