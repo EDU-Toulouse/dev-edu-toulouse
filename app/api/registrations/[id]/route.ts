@@ -10,7 +10,7 @@ import {
 // Get a specific registration
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     if (!(await isAdmin())) {
@@ -21,7 +21,7 @@ export async function GET(
     }
 
     // Await the params before using them
-    const { id } = params;
+    const { id } = await params;
     const registration = await getRegistrationById(id);
     if (!registration) {
       return NextResponse.json(
@@ -42,11 +42,11 @@ export async function GET(
 // Delete an event
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const currentUser = await getCurrentUser();
-    const { id } = params;
+    const { id } = await params;
 
     const concernedRegistration = await getRegistrationById(id);
     if (
