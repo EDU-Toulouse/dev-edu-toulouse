@@ -12,7 +12,7 @@ import {
 import { Event, EventStatus } from "@/types/event";
 import { User } from "@/types/user";
 import { TriangleAlertIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -42,6 +42,7 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
     fetchCurrentUser();
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (currentUser && event) {
       checkRegistrationStatus();
@@ -61,7 +62,7 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
     }
   };
 
-  const checkRegistrationStatus = async () => {
+  const checkRegistrationStatus = useCallback(async () => {
     if (!currentUser) return;
 
     try {
@@ -84,7 +85,7 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
     } catch (error) {
       console.error("Failed to check registration status:", error);
     }
-  };
+  }, [currentUser, event]);
 
   const handleOnRegister = async (eventId: string, userId: string) => {
     setIsLoading(true);
