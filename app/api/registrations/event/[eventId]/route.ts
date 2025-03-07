@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ eventId: string }> }
+  { params }: { params: { eventId: string } }
 ) {
   try {
     if (!(await isAdmin())) {
@@ -14,7 +14,7 @@ export async function GET(
       );
     }
 
-    const { eventId } = await params;
+    const { eventId } = params;
     const registrations = await getEventRegistrations(eventId);
 
     return NextResponse.json({ status: 200, data: registrations });
