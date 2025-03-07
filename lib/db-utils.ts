@@ -5,26 +5,21 @@ import { Role, User } from "@/types/user";
 import { Event } from "@/types/event";
 import { Registration } from "@prisma/client";
 
-export async function getUserSession() {
-  try {
-    const authResult = await auth();
-    return authResult;
-  } catch (error) {
-    console.error("Auth error:", error);
-    return null;
-  }
-}
-
 export async function getCurrentUser(email?: string) {
   try {
     if (email) {
       return await getUserByEmail(email);
     }
-    const session = await getUserSession();
-    if (!session || !session.user || !session.user.email) {
+    try {
+      const session = await auth();
+      if (!session || !session.user || !session.user.email) {
+        return null;
+      }
+      return await getUserByEmail(session.user.email);
+    } catch (error) {
+      console.error("Auth error:", error);
       return null;
     }
-    return await getUserByEmail(session.user.email);
   } catch (error) {
     console.error("Error getting current user:", error);
     return null;

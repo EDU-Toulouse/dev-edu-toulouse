@@ -42,7 +42,7 @@ const RegistrationButton = ({ event, setRefresh, refresh }: Props) => {
     fetchCurrentUser();
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => {
     if (currentUser && event) {
       checkRegistrationStatus();
