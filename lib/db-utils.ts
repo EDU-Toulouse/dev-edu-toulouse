@@ -1,20 +1,25 @@
 // @/lib/db-utils.ts
 import { prisma } from "@/prisma";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Role, User } from "@/types/user";
 import { Event } from "@/types/event";
 import { Registration } from "@prisma/client";
 
 export async function getCurrentUser(email?: string) {
   try {
+    // If email is provided, fetch user directly
     if (email) {
       return await getUserByEmail(email);
     }
+
     try {
-      const session = await auth();
-      if (!session || !session.user || !session.user.email) {
+      const session = await getServerSession(authOptions);
+
+      if (!session?.user?.email) {
         return null;
       }
+
       return await getUserByEmail(session.user.email);
     } catch (error) {
       console.error("Auth error:", error);
@@ -26,16 +31,12 @@ export async function getCurrentUser(email?: string) {
   }
 }
 
-// Check if the session and the user's email exist
+// Check if the user is an admin
 export async function isAdmin() {
   const currentUser: User | null | undefined = await getCurrentUser();
 
   // Check whether the user exists and has the right role
-  if (!currentUser || currentUser?.role !== Role.ADMIN) {
-    return false;
-  }
-
-  return true;
+  return !!(currentUser && currentUser.role === Role.ADMIN);
 }
 
 // Fetch all users
@@ -116,40 +117,40 @@ export async function deleteEvent(id: string) {
   });
 }
 
-// Get all events
+// Get all registrations
 export const getRegistrations = async () => {
   return prisma.registration.findMany();
 };
 
-// Get a specific event by ID
+// Get a specific registration by ID
 export async function getRegistrationById(id: string) {
   return prisma.registration.findUnique({
     where: { id },
   });
 }
 
-// Get all the registration for a given user (by its userId)
+// Get all the registrations for a given user
 export async function getUserRegistrations(userId: string) {
   return prisma.registration.findMany({
     where: { userId },
   });
 }
 
-// Get all the registrations for a given event (by its eventId)
+// Get all the registrations for a given event
 export async function getEventRegistrations(eventId: string) {
   return prisma.registration.findMany({
     where: { eventId },
   });
 }
 
-// Create a new event
+// Create a new registration
 export async function createRegistration(registrationData: Registration) {
   return prisma.registration.create({
     data: registrationData,
   });
 }
 
-// Delete an event
+// Delete a registration
 export async function deleteRegistration(id: string) {
   return prisma.registration.delete({
     where: { id },

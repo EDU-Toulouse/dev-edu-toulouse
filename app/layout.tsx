@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 import Navbar from "./_components/nav-bar";
+import AuthProvider from "@/components/AuthProvider";
 
 const inter = Inter({
   variable: "--font-inter-sans",
@@ -19,14 +19,14 @@ export const metadata: Metadata = {
   description: "EDU Toulouse Website",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="fr" className="dark">
-      <SessionProvider>
+      <AuthProvider>
         <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
           <Navbar />
           <div className="p-3 mt-16 min-h-screen">{children}</div>
@@ -69,7 +69,7 @@ export default function RootLayout({
             </div>
           </footer>
         </body>
-      </SessionProvider>
+      </AuthProvider>
     </html>
   );
 }

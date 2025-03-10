@@ -28,9 +28,9 @@ function Profile() {
 
   useEffect(() => {
     // Only fetch when authenticated
-    if (status === "authenticated" && session?.user?.id) {
+    if (status === "authenticated" && session?.user) {
       // Fetch user data from an API route
-      fetch(`/api/users/${session.user.id}`)
+      fetch(`/api/users/${(session.user as User).id}`)
         .then((res) => res.json())
         .then((data) => setUserData(data.data));
     }
