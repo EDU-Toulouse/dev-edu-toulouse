@@ -1,10 +1,10 @@
 // @/app/api/test/route.ts
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await getServerSession();
 
     if (session) {
       return NextResponse.json({ status: 200, data: "Success" });

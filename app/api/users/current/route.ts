@@ -1,11 +1,11 @@
 // @/app/api/users/current/route.ts
-import { auth } from "@/auth";
 import { prisma } from "@/prisma";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await getServerSession();
     const currentUser = await prisma.user.findUnique({
       where: { id: session?.user?.id },
     });
