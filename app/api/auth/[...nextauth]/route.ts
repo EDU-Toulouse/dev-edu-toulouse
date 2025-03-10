@@ -3,7 +3,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import { PrismaClient } from "@prisma/client";
 import { PrismaAdapter } from "@next-auth/prisma-adapter"; // Note different package
 import DiscordProvider from "next-auth/providers/discord";
-import { JWT } from "next-auth/jwt";
 
 const prisma = new PrismaClient();
 

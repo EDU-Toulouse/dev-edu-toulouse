@@ -6,7 +6,7 @@ import { Role, User } from "@/types/user";
 import { Event } from "@/types/event";
 import { Registration } from "@prisma/client";
 
-export async function getCurrentUser(email?: string, req?: any, res?: any) {
+export async function getCurrentUser(email?: string) {
   try {
     // If email is provided, fetch user directly
     if (email) {
@@ -14,10 +14,7 @@ export async function getCurrentUser(email?: string, req?: any, res?: any) {
     }
 
     try {
-      const session =
-        req && res
-          ? await getServerSession(req, res, authOptions)
-          : await getServerSession(authOptions);
+      const session = await getServerSession(authOptions);
 
       if (!session?.user?.email) {
         return null;
@@ -35,12 +32,8 @@ export async function getCurrentUser(email?: string, req?: any, res?: any) {
 }
 
 // Check if the user is an admin
-export async function isAdmin(req?: any, res?: any) {
-  const currentUser: User | null | undefined = await getCurrentUser(
-    undefined,
-    req,
-    res
-  );
+export async function isAdmin() {
+  const currentUser: User | null | undefined = await getCurrentUser();
 
   // Check whether the user exists and has the right role
   return !!(currentUser && currentUser.role === Role.ADMIN);
