@@ -1,7 +1,7 @@
 // @/lib/db-utils.ts
 import { prisma } from "@/prisma";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth.config";
 import { Role, User } from "@/types/user";
 import { Event } from "@/types/event";
 import { Registration } from "@prisma/client";
